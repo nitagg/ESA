@@ -71,6 +71,7 @@ public class WikiXMLFileReader {
 			String articleContent = null;
 			boolean article = false;
 			while((line=reader.readLine())!=null) {	
+				System.out.println("line: " +line);
 				if((line.contains("<title>")) && (line.contains("</title>")))
 					articleTitle = line.substring(line.indexOf("<title>") +"<title>".length(), line.indexOf("</title>"));				
 				if(line.contains("<page>"))
