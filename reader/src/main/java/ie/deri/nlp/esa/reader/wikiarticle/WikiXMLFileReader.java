@@ -71,10 +71,9 @@ public class WikiXMLFileReader {
 			String articleContent = null;
 			boolean article = false;
 			while((line=reader.readLine())!=null) {	
-				System.out.println("line: " +line);
 				if((line.contains("<title>")) && (line.contains("</title>")))
 					articleTitle = line.substring(line.indexOf("<title>") +"<title>".length(), line.indexOf("</title>"));				
-				if(line.contains("<page>"))
+				if(line.contains("<page"))
 					article = true;
 				if(article)
 					articleContent = articleContent +"\n"+line;				
@@ -121,9 +120,7 @@ public class WikiXMLFileReader {
 		}
 
 		private String cleanArticleContent(String content, String title) {
-			System.out.println("title: "+title);
-//			if(content == null)
-//				return null;
+//			System.out.println("title: "+title);
 			if(isNameSpace(title))
 				return null;
 			if(title.toLowerCase().contains("(disambiguation)"))
@@ -166,6 +163,22 @@ public class WikiXMLFileReader {
 			"Category:","Category_talk:","Portal:","Portal_talk:","Book:","Book_talk:"};
 
 		public static HashSet<String> values = new HashSet<String>(Arrays.asList(list));
+	}
+	
+	public static void main(String[] args) {
+		String xmlFilePath = "/Users/nitagg/deri/eclipse/data/Wiki_dump/testWiki.xml";
+		WikiXMLFileReader reader = new WikiXMLFileReader(xmlFilePath);
+		Iterator<WikiArticle> articleIter = null;
+		try {
+			articleIter = reader.getWikiArticleIter();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		while(articleIter.hasNext())
+			System.out.println(articleIter.next().getTitle());
+		
 	}
 
 }
