@@ -120,6 +120,9 @@ public class WikiXMLFileReader {
 		}
 
 		private String cleanArticleContent(String content, String title) {
+			System.out.println("title: "+title);
+//			if(content == null)
+//				return null;
 			if(isNameSpace(title))
 				return null;
 			if(title.toLowerCase().contains("(disambiguation)"))
