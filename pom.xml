@@ -23,6 +23,6 @@
   	<module>reader</module>
   	<module>lucene</module>
   	<module>processor.wiki</module>
-  	<module>main</module>
+  	<module>mains</module>
   </modules>
 </project>
