@@ -5,7 +5,6 @@ public class WikiArticle {
 
 	private String content = null;
 	private String title = null;	
-	private String entities = null;
 	
 	
 	public WikiArticle(String contennt, String title){
@@ -13,20 +12,7 @@ public class WikiArticle {
 		this.title = title;
 	}
 	
-	public WikiArticle(String contennt, String title, String entities){
-		this.content = contennt;
-		this.title = title;
-		this.entities = entities;
-	}
 	
-	public String getEntities() {
-		return entities;
-	}
-
-	public void setEntities(String entities) {
-		this.entities = entities;
-	}
-
 	public String getContent() {
 		return content;
 	}

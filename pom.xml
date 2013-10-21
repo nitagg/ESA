@@ -22,5 +22,7 @@
   	<module>core</module>
   	<module>reader</module>
   	<module>lucene</module>
+  	<module>processor.wiki</module>
+  	<module>main</module>
   </modules>
 </project>
