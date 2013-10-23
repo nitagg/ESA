@@ -12,19 +12,18 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
 
-
-
-/**
- *  
- * @author kasooja 
- */
-
 public class WikiXMLFileReader {
 
+	private static final Pattern digitPattern = Pattern.compile("^\\d+$");
+	private static final Pattern yearPattern = Pattern.compile("\\s*[12][0-9]{3}\\s*");
+//	private static final Pattern linkPattern = Pattern.compile("\\[\\[(.*?)]]");
+	
 	private String xmlFilePath = null;	
 	private static final int MinArticleLength = 200;
 	
@@ -112,6 +111,14 @@ public class WikiXMLFileReader {
 
 		// return true if title is a absolute article not any nameSpace type e.g. Category 
 		private Boolean isNameSpace(String title){
+			Matcher matcher = digitPattern.matcher(title);
+			if(matcher.find())
+				return true;
+
+			matcher = yearPattern.matcher(title);
+			if(matcher.find())
+				return true;
+			
 			for(String key: WikiNamespaces.values){
 				if(title.toLowerCase().contains(key.toLowerCase()))
 					return true;
