@@ -22,6 +22,7 @@ public class Indexer {
 
 	public Indexer(IndexWriterConfig config, Directory index) {
 		this.config = config;
+		config.setSimilarity(new NTFIDF());
 		this.index = index;
 		openIndexWriter();		
 	}
@@ -38,7 +39,6 @@ public class Indexer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		writer.setSimilarity(new NTFIDF());
 	}
 
 	public void closeIndexer(){
@@ -99,7 +99,7 @@ public class Indexer {
 
 		@Override
 		public float computeNorm(String arg0, FieldInvertState arg1) {
-			return 1;
+			return (float)(1.0/ arg1.getLength());
 		}
 	}
 
