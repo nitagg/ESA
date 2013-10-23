@@ -26,8 +26,8 @@ import org.apache.commons.lang3.StringEscapeUtils;
 public class WikiXMLFileReader {
 
 	private String xmlFilePath = null;	
-	//private final String STRANGE_SEQ = "|||__|||";
-
+	private static final int MinArticleLength = 200;
+	
 	public WikiXMLFileReader(String xmlFilePath){
 		if(isXMLFile(xmlFilePath)) 		
 			this.xmlFilePath = xmlFilePath;
@@ -125,6 +125,9 @@ public class WikiXMLFileReader {
 				return null;
 			if(title.toLowerCase().contains("(disambiguation)"))
 				return null;
+			if(title.toLowerCase().startsWith("list"))
+				return null;
+			
 			BufferedReader reader = new BufferedReader(new StringReader(content));
 			StringBuilder doc = null;
 			String s;
@@ -139,6 +142,12 @@ public class WikiXMLFileReader {
 							// remove all redirect articles
 							if(cleanWiki.toLowerCase().contains("#REDIRECT".toLowerCase()))
 								return null;							
+							
+							HashSet<String> uniqueTokens = new HashSet<String>(Arrays.asList(cleanWiki.split(" ")));
+//							
+							if(uniqueTokens.size() < MinArticleLength)
+								return null;
+
 							return cleanWiki.trim();
 						}
 					}
