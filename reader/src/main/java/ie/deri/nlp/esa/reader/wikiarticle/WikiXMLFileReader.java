@@ -25,13 +25,20 @@ public class WikiXMLFileReader {
 	//	private static final Pattern linkPattern = Pattern.compile("\\[\\[(.*?)]]");
 
 	private String xmlFilePath = null;	
-	private static final int MinArticleLength = 200;
+	private final int MinArticleLength = 200;
+	private int artcleTitleWeight = 3;
+
 
 	public WikiXMLFileReader(String xmlFilePath){
 		if(isXMLFile(xmlFilePath)) 		
 			this.xmlFilePath = xmlFilePath;
 	}
 
+	public boolean setArtcleTitleWeight(final int artcleTitleWeight){
+		this.artcleTitleWeight = artcleTitleWeight;
+		return true;
+	}
+	
 	private boolean isXMLFile(String xmlFilePath) {
 		if(xmlFilePath.endsWith(".xml"))
 			return true;
@@ -39,6 +46,7 @@ public class WikiXMLFileReader {
 		return false;	
 	}
 
+	
 	public Iterator<WikiArticle> getWikiArticleIter() throws IOException{
 		return new XMLFileWikiArticleIter(BasicFileTools.getBufferedReaderFile(xmlFilePath));
 	}
@@ -48,13 +56,20 @@ public class WikiXMLFileReader {
 
 		private BufferedReader reader;
 		private WikiArticle article = null;
-
-
+		
+		
 		public XMLFileWikiArticleIter(BufferedReader reader) throws IOException {
 			this.reader = reader;
 			toNext();
 		}
 
+		private String processArticleContent(String articleContent, String articleTitle){
+			for(int count = 0; count < artcleTitleWeight; count++)
+				articleContent = articleContent + " " + articleTitle;
+			
+			return articleContent;
+		}
+		
 		public void toNext() throws IOException{
 			tryNext();
 			if(article!=null)
@@ -87,7 +102,8 @@ public class WikiXMLFileReader {
 				if(cleanArticleContent == null)
 					this.article = new WikiArticle(cleanArticleContent, articleTitle);
 				else
-					this.article = new WikiArticle(cleanArticleContent + articleTitle +" "+articleTitle +" "+articleTitle, articleTitle);
+					this.article = new WikiArticle(this.processArticleContent(cleanArticleContent, articleTitle), articleTitle);
+//				this.article = new WikiArticle(cleanArticleContent + articleTitle +" "+articleTitle +" "+articleTitle, articleTitle);
 			}
 			else{
 				this.article = null;

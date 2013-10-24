@@ -29,6 +29,7 @@ public class WikiTextIndexer {
 	private static Properties config = new Properties();
 	private String wikiXmlFilePath;
 	private String wikiEntityIndexPathToWrite;
+	private int articleTitleWeight = 3;
 	private final double BUFFERRAMSIZE = 2000.0;
 	private Indexer indexer;
 
@@ -47,6 +48,7 @@ public class WikiTextIndexer {
 			config.load(new FileInputStream(configPath));			
 			wikiEntityIndexPathToWrite = config.getProperty("wikiTextIndexPath");
 			wikiXmlFilePath = config.getProperty("wikiXmlFilePath");
+			articleTitleWeight = Integer.parseInt(config.getProperty("articleTitleWeight"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
