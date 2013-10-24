@@ -2,6 +2,7 @@ package ie.deri.nlp.esa.processor.wiki.index;
 
 
 
+import ie.deri.nlp.esa.lucene.AnalyzerFactory;
 import ie.deri.nlp.esa.lucene.Indexer;
 import ie.deri.nlp.esa.reader.wikiarticle.WikiArticle;
 import ie.deri.nlp.esa.reader.wikiarticle.WikiXMLFileReader;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 
-import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
@@ -60,8 +60,7 @@ public class WikiTextIndexer {
 	private void openWriter() {		
 		try {
 
-			//		    IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_35, AnalyzerFactory.getAnalyzer());
-			IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_35, new WhitespaceAnalyzer(Version.LUCENE_35));
+			IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_35, AnalyzerFactory.getAnalyzer());
 			config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
 			Directory index = getIndex(wikiEntityIndexPathToWrite);
 			if(IndexReader.indexExists(index)) 
@@ -100,12 +99,14 @@ public class WikiTextIndexer {
 
 		while(wikiArticleIter.hasNext()) {
 			WikiArticle wikiArticle = wikiArticleIter.next();
-			//			System.out.println("title: "+wikiArticle.getTitle() +"\n entities: "+ wikiArticle.getEntities());// +"\ncontent: "+ wikiArticle.getContent());
-			docCreator.addTitleField(wikiArticle.getTitle());
-			docCreator.addTextContentField(wikiArticle.getContent());
+			if ((wikiArticle.getTitle() != null) && (wikiArticle.getContent() != null) && (wikiArticle.getTitle().length() > 0) && (wikiArticle.getContent().length() > 0)){
 
-			indexer.addDoc(docCreator.getLucDoc());
-			docCreator.reset();
+				docCreator.addTitleField(wikiArticle.getTitle());
+				docCreator.addTextContentField(wikiArticle.getContent());
+
+				indexer.addDoc(docCreator.getLucDoc());
+				docCreator.reset();
+			}
 		}
 
 		indexer.closeIndexer();		
