@@ -24,5 +24,6 @@
   	<module>lucene</module>
   	<module>processor.wiki</module>
   	<module>mains</module>
+  	<module>evaluation</module>
   </modules>
 </project>
